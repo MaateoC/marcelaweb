@@ -1,0 +1,142 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Get a free hosted Postgres database in seconds: `npx create-db`
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model Transaccion {
+  id           String      @id @default(uuid())
+  tipo         String      // "INGRESO" | "GASTO" | "AHORRO"
+  monto        Float
+  descripcion  String
+  fecha        DateTime
+  categoria    String      // e.g. "Sueldo", "Alquiler", "Impuestos", "Ahorro", etc.
+  subcategoria String?
+  propiedadId  String?
+  propiedad    Propiedad?  @relation(fields: [propiedadId], references: [id])
+  pagoId       String?     @unique
+  pagoAlquiler PagoAlquiler? @relation(fields: [pagoId], references: [id])
+  gastoFijoId  String?
+  gastoFijo    GastoFijo?  @relation(fields: [gastoFijoId], references: [id])
+  medioPago    String?     // "EFECTIVO" | "DEBITO" | "CREDITO"
+  tarjetaId    String?
+  tarjeta      TarjetaAsociada? @relation(fields: [tarjetaId], references: [id])
+  cuotasTotal  Int?        @default(1)
+  cuotaNumero  Int?        @default(1)
+  recargo      Float?      @default(0)
+  createdAt    DateTime    @default(now())
+  updatedAt    DateTime    @updatedAt
+}
+
+model Propiedad {
+  id            String           @id @default(uuid())
+  nombre        String           // e.g. "Depto A", "Local Comercial B"
+  tipo          String           // "DEPARTAMENTO" | "LOCAL"
+  direccion     String
+  estado        String           // "ACTIVO" | "INACTIVO" | "MANTENIMIENTO"
+  contratos     Contrato[]
+  transacciones Transaccion[]
+  gastos        GastoPropiedad[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+}
+
+model Contrato {
+  id                      String            @id @default(uuid())
+  propiedadId             String
+  propiedad               Propiedad         @relation(fields: [propiedadId], references: [id])
+  inquilinoNombre         String
+  fechaInicio             DateTime
+  fechaFin                DateTime
+  montoInicial            Float
+  montoActual             Float
+  indiceActualizacion     String            // "ICL" | "CAC" | "IPC" | "FIJO"
+  frecuenciaActualizacion Int               // en meses, e.g. 3, 4, 6
+  ultimaActualizacion     DateTime?
+  documentoPath           String?           // Ruta al documento escrito (Word o PDF)
+  pagos                   PagoAlquiler[]
+  historialAjustes        HistorialAjuste[]
+  createdAt               DateTime          @default(now())
+  updatedAt               DateTime          @updatedAt
+}
+
+model HistorialAjuste {
+  id          String   @id @default(uuid())
+  contratoId  String
+  contrato    Contrato @relation(fields: [contratoId], references: [id])
+  fecha       DateTime // Fecha de aplicación
+  montoPrevio Float
+  montoNuevo  Float
+  porcentaje  Float
+  createdAt   DateTime @default(now())
+}
+
+model PagoAlquiler {
+  id            String       @id @default(uuid())
+  contratoId    String
+  contrato      Contrato     @relation(fields: [contratoId], references: [id])
+  mesReferencia String       // e.g. "2026-07"
+  montoCobrado  Float
+  fechaPago     DateTime?
+  estado        String       // "PAGADO" | "IMPAGO" | "PARCIAL"
+  transaccion   Transaccion?
+  createdAt     DateTime     @default(now())
+  updatedAt     DateTime     @updatedAt
+}
+
+model ImpuestoConfigurado {
+  id             String   @id @default(uuid())
+  nombre         String   // e.g. "TGI Rosario"
+  descripcion    String?  // e.g. "Tasa General de Inmuebles"
+  montoSugerido  Float
+  diaVencimiento Int      // día del mes (1 al 31)
+  categoria      String   // e.g. "Impuestos Locales", "Servicios"
+  subcategoria   String?  // e.g. "TGI Rosario"
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @updatedAt
+}
+
+model GastoPropiedad {
+  id          String    @id @default(uuid())
+  propiedadId String
+  propiedad   Propiedad @relation(fields: [propiedadId], references: [id], onDelete: Cascade)
+  fecha       DateTime
+  descripcion String
+  monto       Float
+  tipo        String    // "MANTENIMIENTO" | "EXPENSA_EXTRAORDINARIA" | "OTRO"
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+}
+
+model TarjetaAsociada {
+  id             String      @id @default(uuid())
+  nombre         String      // e.g. "Visa Galicia", "Mastercard"
+  diaCierre      Int
+  diaVencimiento Int
+  gastosFijos    GastoFijo[]
+  transacciones  Transaccion[]
+  createdAt      DateTime    @default(now())
+  updatedAt      DateTime    @updatedAt
+}
+
+model GastoFijo {
+  id            String           @id @default(uuid())
+  nombre        String
+  categoria     String           // e.g. "Salud", "Servicios", etc.
+  monto         Float
+  diaPago       Int
+  tarjetaId     String?
+  tarjeta       TarjetaAsociada? @relation(fields: [tarjetaId], references: [id])
+  estado        String           @default("ACTIVO") // "ACTIVO" | "INACTIVO"
+  transacciones Transaccion[]
+  createdAt     DateTime         @default(now())
+  updatedAt     DateTime         @updatedAt
+}
+
