@@ -5,6 +5,7 @@ import Providers from '@/app/providers';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { MobileNavbar } from '@/components/layout/MobileNavbar';
 import { MobileHeader } from '@/components/layout/MobileHeader';
+import { AuthGate } from '@/components/layout/AuthGate';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -42,26 +43,28 @@ export default function RootLayout({
     >
       <body className="min-h-full flex bg-zinc-950 text-zinc-50 font-sans">
         <Providers>
-          {/* Left Sidebar for Desktop */}
-          <Sidebar />
+          <AuthGate>
+            {/* Left Sidebar for Desktop */}
+            <Sidebar />
 
-          <div className="flex-1 flex flex-col md:pl-64 min-h-screen pb-20 md:pb-0 overflow-x-hidden">
-            {/* Mobile Header Sub-Navigation */}
-            <MobileHeader />
+            <div className="flex-1 flex flex-col md:pl-64 min-h-screen pb-20 md:pb-0 overflow-x-hidden">
+              {/* Mobile Header Sub-Navigation */}
+              <MobileHeader />
 
-            {/* Main Content */}
-            <main className="flex-1 px-4 pb-8 pt-[96px] md:pt-8 sm:px-6 lg:px-8 max-w-7xl w-full mx-auto">
-              {children}
-            </main>
+              {/* Main Content */}
+              <main className="flex-1 px-4 pb-8 pt-[96px] md:pt-8 sm:px-6 lg:px-8 max-w-7xl w-full mx-auto">
+                {children}
+              </main>
 
-            {/* Footer */}
-            <footer className="border-t border-zinc-900 bg-zinc-950 py-6 text-center text-xs text-zinc-600">
-              <p>© {new Date().getFullYear()} Marcela | Finance. Todos los derechos reservados.</p>
-            </footer>
-          </div>
+              {/* Footer */}
+              <footer className="border-t border-zinc-900 bg-zinc-950 py-6 text-center text-xs text-zinc-600">
+                <p>© {new Date().getFullYear()} Marcela | Finance. Todos los derechos reservados.</p>
+              </footer>
+            </div>
 
-          {/* Bottom Nav Bar for Mobile */}
-          <MobileNavbar />
+            {/* Bottom Nav Bar for Mobile */}
+            <MobileNavbar />
+          </AuthGate>
         </Providers>
       </body>
     </html>
