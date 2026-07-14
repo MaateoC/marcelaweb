@@ -46,7 +46,6 @@ export default function MetasAhorroPage() {
   const [isEnteringTenencia, setIsEnteringTenencia] = useState(false);
   const [tenenciaAmount, setTenenciaAmount] = useState('');
   const [tenenciaCurrency, setTenenciaCurrency] = useState<'ARS' | 'USD'>('USD');
-  const [tenenciaMode, setTenenciaMode] = useState<'SET' | 'ADD'>('SET');
 
   useEffect(() => {
     // Load goals
@@ -199,11 +198,7 @@ export default function MetasAhorroPage() {
     if (isNaN(amount) || amount < 0) return;
 
     const updated = { ...baseHoldings };
-    if (tenenciaMode === 'SET') {
-      updated[tenenciaCurrency] = amount;
-    } else {
-      updated[tenenciaCurrency] = (updated[tenenciaCurrency] || 0) + amount;
-    }
+    updated[tenenciaCurrency] = amount;
 
     saveBaseHoldings(updated);
     setTenenciaAmount('');
@@ -275,7 +270,7 @@ export default function MetasAhorroPage() {
           onClick={() => setIsEnteringTenencia(!isEnteringTenencia)}
           className="rounded-xl border border-zinc-800 bg-zinc-900 hover:bg-zinc-850 px-4 py-2.5 text-sm font-bold text-white transition-all shadow-lg cursor-pointer"
         >
-          {isEnteringTenencia ? 'Cancelar' : 'Ingresar tenencia'}
+          {isEnteringTenencia ? 'Cancelar' : 'Ingresar tenencia libre'}
         </button>
       </div>
 
@@ -283,10 +278,10 @@ export default function MetasAhorroPage() {
       {isEnteringTenencia && (
         <form onSubmit={handleTenenciaSubmit} className="p-5 rounded-2xl border border-zinc-800 bg-zinc-950/80 space-y-4 max-w-xl animate-in slide-in-from-top-3 duration-250">
           <div>
-            <h3 className="text-sm font-bold text-white">Ingresar Tenencia de Ahorro</h3>
-            <p className="text-xs text-zinc-400 mt-0.5">Ingresa capital ahorrado en efectivo o cuentas bancarias (independiente de las metas)</p>
+            <h3 className="text-sm font-bold text-white">Ingresar Tenencia Libre</h3>
+            <p className="text-xs text-zinc-400 mt-0.5">Ingresa capital ahorrado libre (fuera de las metas de ahorro, ej. efectivo o saldo bancario)</p>
           </div>
-          <div className="grid grid-cols-1 sm:grid-cols-3 gap-3.5">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5">
             <div className="space-y-1">
               <label className="text-[10px] font-semibold text-zinc-550">Moneda</label>
               <select
@@ -296,17 +291,6 @@ export default function MetasAhorroPage() {
               >
                 <option value="USD">Dólares (USD)</option>
                 <option value="ARS">Pesos (ARS)</option>
-              </select>
-            </div>
-            <div className="space-y-1">
-              <label className="text-[10px] font-semibold text-zinc-550">Modo de Operación</label>
-              <select
-                value={tenenciaMode}
-                onChange={(e) => setTenenciaMode(e.target.value as 'SET' | 'ADD')}
-                className="w-full rounded-lg border border-zinc-800 bg-zinc-900 px-3 py-1.5 text-xs text-white focus:outline-none"
-              >
-                <option value="SET">Establecer Saldo Libre</option>
-                <option value="ADD">Sumar al Saldo Libre</option>
               </select>
             </div>
             <div className="space-y-1">
@@ -327,7 +311,7 @@ export default function MetasAhorroPage() {
               type="submit"
               className="rounded-lg bg-blue-600 px-4 py-1.5 text-xs font-bold text-white hover:bg-blue-500 transition"
             >
-              Guardar tenencia
+              Guardar tenencia libre
             </button>
           </div>
         </form>

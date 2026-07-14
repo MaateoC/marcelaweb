@@ -16,7 +16,8 @@ import {
   Settings,
   Bell,
   X,
-  PiggyBank
+  PiggyBank,
+  DollarSign
 } from 'lucide-react';
 
 export function Sidebar() {
@@ -42,6 +43,7 @@ export function Sidebar() {
       items: [
         { name: 'Alquileres', href: '/propiedades', icon: Building2 },
         { name: 'Simulación', href: '/propiedades/simulacion', icon: Calculator },
+        { name: 'Dólar', href: '/propiedades/dolar', icon: DollarSign },
       ],
     },
     {
@@ -388,7 +390,7 @@ export function Sidebar() {
                     {section.items.map((item) => {
                       const isActive = (() => {
                         if (item.href === '/propiedades') {
-                          return pathname === '/propiedades' || (pathname.startsWith('/propiedades/') && pathname !== '/propiedades/simulacion');
+                          return pathname === '/propiedades' || (pathname.startsWith('/propiedades/') && pathname !== '/propiedades/simulacion' && pathname !== '/propiedades/dolar');
                         }
                         return pathname === item.href;
                       })();

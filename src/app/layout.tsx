@@ -4,6 +4,7 @@ import './globals.css';
 import Providers from '@/app/providers';
 import { Sidebar } from '@/components/layout/Sidebar';
 import { MobileNavbar } from '@/components/layout/MobileNavbar';
+import { MobileHeader } from '@/components/layout/MobileHeader';
 
 const geistSans = Geist({
   variable: '--font-geist-sans',
@@ -38,6 +39,9 @@ export default function RootLayout({
 
           {/* Main Content Container */}
           <div className="flex-1 flex flex-col md:pl-64 min-h-screen pb-20 md:pb-0">
+            {/* Mobile Header Sub-Navigation */}
+            <MobileHeader />
+
             {/* Main Content */}
             <main className="flex-1 px-4 py-8 sm:px-6 lg:px-8 max-w-7xl w-full mx-auto">
               {children}

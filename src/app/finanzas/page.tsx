@@ -1,19 +1,14 @@
 'use client';
 
 import React, { useState, useMemo, useEffect, Suspense } from 'react';
-import { useSearchParams } from 'next/navigation';
-import Link from 'next/link';
 import { useTransactions } from '@/hooks/useTransactions';
 import { useProperties } from '@/hooks/useProperties';
 import { TransactionForm } from '@/components/finanzas/TransactionForm';
 import { formatCurrency } from '@/lib/utils';
 import { 
-  Calendar, 
-  Filter, 
   Search, 
   ArrowUpRight, 
   ArrowDownRight, 
-  PiggyBank, 
   Wallet, 
   Activity,
   Plus,
@@ -42,8 +37,6 @@ function FinanzasPageContent() {
   const [isModalOpen, setIsModalOpen] = useState<boolean>(false);
 
   const [goals, setGoals] = useState<SavingsGoal[]>([]);
-  const [activeAction, setActiveAction] = useState<{ goalId: string; type: 'CONTRIBUTION' | 'WITHDRAWAL' } | null>(null);
-  const [actionAmount, setActionAmount] = useState('');
 
   useEffect(() => {
     const stored = localStorage.getItem('savings_goals');
@@ -54,6 +47,7 @@ function FinanzasPageContent() {
         console.error(e);
       }
     } else {
+      // Defaults if not found
       const defaults: SavingsGoal[] = [
         {
           id: 'goal-1',
@@ -77,8 +71,8 @@ function FinanzasPageContent() {
           ]
         }
       ];
-      setGoals(defaults);
       localStorage.setItem('savings_goals', JSON.stringify(defaults));
+      setGoals(defaults);
     }
   }, []);
 
@@ -97,53 +91,6 @@ function FinanzasPageContent() {
     window.addEventListener('storage', syncGoals);
     return () => window.removeEventListener('storage', syncGoals);
   }, []);
-
-  const saveGoals = (updatedGoals: SavingsGoal[]) => {
-    setGoals(updatedGoals);
-    localStorage.setItem('savings_goals', JSON.stringify(updatedGoals));
-    window.dispatchEvent(new Event('storage'));
-  };
-
-  const handleDeleteGoal = (id: string) => {
-    if (window.confirm('¿Estás segura de que quieres eliminar esta meta de ahorro?')) {
-      const updated = goals.filter(g => g.id !== id);
-      saveGoals(updated);
-    }
-  };
-
-  const formatGoalCurrency = (amount: number, currency: 'ARS' | 'USD') => {
-    if (currency === 'USD') {
-      return `USD ${amount.toLocaleString('es-AR', { minimumFractionDigits: 0, maximumFractionDigits: 2 })}`;
-    }
-    return formatCurrency(amount);
-  };
-
-  const handleActionSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!activeAction || !actionAmount) return;
-    const amount = parseFloat(actionAmount);
-    if (isNaN(amount) || amount <= 0) return;
-
-    const updated = goals.map(g => {
-      if (g.id === activeAction.goalId) {
-        const newTransaction: GoalTransaction = {
-          id: `tx-${Date.now()}`,
-          type: activeAction.type,
-          amount: amount,
-          date: new Date().toISOString()
-        };
-        return {
-          ...g,
-          transactions: [...g.transactions, newTransaction]
-        };
-      }
-      return g;
-    });
-
-    saveGoals(updated);
-    setActiveAction(null);
-    setActionAmount('');
-  };
 
   // Fetch all transactions for the selected month
   const { transactions: allTransactions, isLoading: isTxsLoading } = useTransactions({
@@ -518,137 +465,6 @@ function FinanzasPageContent() {
                 })}
               </div>
             )}
-          </div>
-
-          {/* Savings Goals Card (Metas de Ahorro) */}
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-950 p-6 mt-6 space-y-6">
-            <div className="flex items-center justify-between border-b border-zinc-900 pb-4">
-              <div className="space-y-0.5">
-                <h3 className="text-base font-bold text-white">Metas de Ahorro</h3>
-                <p className="text-xs text-zinc-400 font-medium">Reservas y aportes acumulados</p>
-              </div>
-              <PiggyBank className="h-5 w-5 text-amber-400 shrink-0" />
-                      </div>
-
-            {/* Quick add trigger button */}
-            <div className="flex justify-between items-center">
-              <span className="text-xs font-semibold text-zinc-500 uppercase font-mono">Mis metas</span>
-              <Link
-                href="/finanzas/metas"
-                className="rounded-lg border border-blue-500/30 bg-blue-500/10 px-2.5 py-1 text-xs font-bold text-blue-400 hover:bg-blue-500/20 transition-all duration-200"
-              >
-                Gestionar
-              </Link>
-            </div>
-
-            {/* Form to contribute or withdraw */}
-            {activeAction && (
-              <form onSubmit={handleActionSubmit} className="p-3.5 rounded-xl border border-zinc-900 bg-zinc-900/30 space-y-3">
-                <h4 className="text-[11px] font-bold text-white uppercase tracking-wider">
-                  {activeAction.type === 'CONTRIBUTION' ? 'Aportar a' : 'Retirar de'} "{goals.find(g => g.id === activeAction.goalId)?.name}"
-                </h4>
-                <div className="space-y-2">
-                  <div className="space-y-1">
-                    <label className="text-[10px] font-semibold text-zinc-550">
-                      Monto ({goals.find(g => g.id === activeAction.goalId)?.currency === 'USD' ? 'USD' : '$'})
-                    </label>
-                    <input
-                      type="number"
-                      required
-                      min="1"
-                      placeholder="Ej. 100"
-                      value={actionAmount}
-                      onChange={(e) => setActionAmount(e.target.value)}
-                      className="w-full rounded-lg border border-zinc-800 bg-zinc-950 px-2.5 py-1.5 text-xs text-white placeholder-zinc-750 focus:border-blue-500 focus:outline-none"
-                    />
-                  </div>
-                </div>
-                <div className="flex justify-end gap-2">
-                  <button
-                    type="button"
-                    onClick={() => { setActiveAction(null); setActionAmount(''); }}
-                    className="rounded-lg border border-zinc-800 bg-zinc-900 px-2.5 py-1.5 text-xs font-semibold text-zinc-400 hover:border-zinc-700 transition"
-                  >
-                    Cancelar
-                  </button>
-                  <button
-                    type="submit"
-                    className={`rounded-lg px-3 py-1.5 text-xs font-bold text-white ${
-                      activeAction.type === 'CONTRIBUTION' ? 'bg-blue-655 hover:bg-blue-600' : 'bg-emerald-655 hover:bg-emerald-600'
-                    }`}
-                  >
-                    Confirmar
-                  </button>
-                </div>
-              </form>
-            )}
-
-            {/* Goals List */}
-            <div className="space-y-5">
-              {goals.length === 0 ? (
-                <p className="text-xs text-zinc-500 italic text-center py-4">No tienes metas configuradas.</p>
-              ) : (
-                goals.map((g) => {
-                  const current = g.transactions.reduce((sum, t) => t.type === 'CONTRIBUTION' ? sum + t.amount : sum - t.amount, 0);
-                  const progressPct = Math.min((current / g.targetAmount) * 100, 100);
-                  return (
-                    <div key={g.id} className="space-y-2 border-b border-zinc-900/40 pb-4 last:border-0 last:pb-0">
-                      <div className="flex justify-between items-start">
-                        <div>
-                          <div className="flex items-center gap-1.5">
-                            <span className="text-xs font-bold text-white">{g.name}</span>
-                            <span className={`text-[8px] font-extrabold px-1 rounded ${
-                              g.currency === 'USD' ? 'bg-amber-500/10 text-amber-400 border border-amber-500/20' : 'bg-blue-500/10 text-blue-400 border border-blue-500/20'
-                            }`}>
-                              {g.currency}
-                            </span>
-                          </div>
-                          <span className="text-[9px] text-zinc-550 block font-mono mt-0.5">
-                            Objetivo: {formatGoalCurrency(g.targetAmount, g.currency)}
-                          </span>
-                        </div>
-                        <div className="flex gap-1.5">
-                          <button
-                            onClick={() => setActiveAction({ goalId: g.id, type: 'CONTRIBUTION' })}
-                            className="rounded bg-blue-500/10 border border-blue-500/20 px-1.5 py-0.5 text-[9px] font-bold text-blue-400 hover:bg-blue-500/20 transition"
-                            title="Aportar"
-                          >
-                            +
-                          </button>
-                          <button
-                            onClick={() => setActiveAction({ goalId: g.id, type: 'WITHDRAWAL' })}
-                            className="rounded bg-emerald-500/10 border border-emerald-500/20 px-1.5 py-0.5 text-[9px] font-bold text-emerald-400 hover:bg-emerald-500/20 transition"
-                            title="Retirar"
-                          >
-                            -
-                          </button>
-                          <button
-                            onClick={() => handleDeleteGoal(g.id)}
-                            className="rounded bg-red-500/10 border border-red-500/20 px-1.5 py-0.5 text-[9px] font-bold text-red-400 hover:bg-red-500/20 transition"
-                            title="Eliminar"
-                          >
-                            x
-                          </button>
-                        </div>
-                      </div>
-
-                      <div className="space-y-1">
-                        <div className="flex justify-between text-[10px] font-semibold text-zinc-400 font-mono">
-                          <span>{formatGoalCurrency(current, g.currency)}</span>
-                          <span>{progressPct.toFixed(0)}%</span>
-                        </div>
-                        <div className="h-1.5 w-full bg-zinc-900 rounded-full overflow-hidden">
-                          <div
-                            className="h-full bg-gradient-to-r from-blue-500 to-indigo-500 rounded-full transition-all duration-500"
-                            style={{ width: `${progressPct}%` }}
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  );
-                })
-              )}
-            </div>
           </div>
         </div>
       </div>
