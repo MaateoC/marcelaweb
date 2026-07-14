@@ -81,6 +81,7 @@ export function MobileHeader() {
             <button
               onClick={() => {
                 localStorage.removeItem('marcela_finance_session');
+                document.cookie = "marcela_finance_user=; path=/; max-age=0; SameSite=Lax";
                 window.location.reload();
               }}
               className="p-1 rounded-md text-zinc-500 hover:text-red-400 hover:bg-zinc-900/60 transition-colors"

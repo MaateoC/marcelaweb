@@ -22,6 +22,7 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
 
   const handleQuickEnter = () => {
     localStorage.setItem('marcela_finance_session', 'authenticated');
+    document.cookie = "marcela_finance_user=demo; path=/; max-age=31536000; SameSite=Lax";
     setIsAuthenticated(true);
   };
 
@@ -29,6 +30,7 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
     e.preventDefault();
     if (username.trim().toLowerCase() === 'marcela' && password === 'brauruguay') {
       localStorage.setItem('marcela_finance_session', 'authenticated');
+      document.cookie = "marcela_finance_user=marcela; path=/; max-age=31536000; SameSite=Lax";
       setIsAuthenticated(true);
       setError('');
     } else {

@@ -435,6 +435,7 @@ export function Sidebar() {
       <button
         onClick={() => {
           localStorage.removeItem('marcela_finance_session');
+          document.cookie = "marcela_finance_user=; path=/; max-age=0; SameSite=Lax";
           window.location.reload();
         }}
         className="w-full flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-xs font-bold text-red-400 hover:text-red-300 hover:bg-red-500/5 transition-all cursor-pointer border border-transparent hover:border-red-950/30 mb-2"

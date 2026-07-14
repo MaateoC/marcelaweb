@@ -13,6 +13,7 @@ datasource db {
 
 model Transaccion {
   id           String      @id @default(uuid())
+  user         String      @default("demo")
   tipo         String      // "INGRESO" | "GASTO" | "AHORRO"
   monto        Float
   descripcion  String
@@ -37,6 +38,7 @@ model Transaccion {
 
 model Propiedad {
   id            String           @id @default(uuid())
+  user          String           @default("demo")
   nombre        String           // e.g. "Depto A", "Local Comercial B"
   tipo          String           // "DEPARTAMENTO" | "LOCAL"
   direccion     String
@@ -50,6 +52,7 @@ model Propiedad {
 
 model Contrato {
   id                      String            @id @default(uuid())
+  user                    String            @default("demo")
   propiedadId             String
   propiedad               Propiedad         @relation(fields: [propiedadId], references: [id])
   inquilinoNombre         String
@@ -69,6 +72,7 @@ model Contrato {
 
 model HistorialAjuste {
   id          String   @id @default(uuid())
+  user        String   @default("demo")
   contratoId  String
   contrato    Contrato @relation(fields: [contratoId], references: [id])
   fecha       DateTime // Fecha de aplicación
@@ -80,6 +84,7 @@ model HistorialAjuste {
 
 model PagoAlquiler {
   id            String       @id @default(uuid())
+  user          String       @default("demo")
   contratoId    String
   contrato      Contrato     @relation(fields: [contratoId], references: [id])
   mesReferencia String       // e.g. "2026-07"
@@ -93,6 +98,7 @@ model PagoAlquiler {
 
 model ImpuestoConfigurado {
   id             String   @id @default(uuid())
+  user           String   @default("demo")
   nombre         String   // e.g. "TGI Rosario"
   descripcion    String?  // e.g. "Tasa General de Inmuebles"
   montoSugerido  Float
@@ -105,6 +111,7 @@ model ImpuestoConfigurado {
 
 model GastoPropiedad {
   id          String    @id @default(uuid())
+  user        String    @default("demo")
   propiedadId String
   propiedad   Propiedad @relation(fields: [propiedadId], references: [id], onDelete: Cascade)
   fecha       DateTime
@@ -117,6 +124,7 @@ model GastoPropiedad {
 
 model TarjetaAsociada {
   id             String      @id @default(uuid())
+  user           String      @default("demo")
   nombre         String      // e.g. "Visa Galicia", "Mastercard"
   diaCierre      Int
   diaVencimiento Int
@@ -128,6 +136,7 @@ model TarjetaAsociada {
 
 model GastoFijo {
   id            String           @id @default(uuid())
+  user          String           @default("demo")
   nombre        String
   categoria     String           // e.g. "Salud", "Servicios", etc.
   monto         Float
