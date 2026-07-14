@@ -237,12 +237,6 @@ export default function PropertiesPage() {
           </p>
         </div>
         <div className="flex flex-wrap gap-2">
-          <Link
-            href="/propiedades/simulacion"
-            className="flex items-center justify-center gap-1.5 rounded-xl border border-zinc-800 bg-zinc-900 px-4 py-2.5 text-xs font-semibold text-white transition-all hover:bg-zinc-800 active:scale-95"
-          >
-            <Calculator className="h-4 w-4 text-blue-400" /> Simulador
-          </Link>
           <button
             onClick={() => setIsNewPropOpen(true)}
             className="flex cursor-pointer items-center justify-center gap-1.5 rounded-xl bg-blue-600 px-4 py-2.5 text-xs font-semibold text-white transition-all hover:bg-blue-500 active:scale-95"
@@ -253,7 +247,11 @@ export default function PropertiesPage() {
       </div>
 
       {/* Indicadores Oficiales (ICL, IPC, CAC) */}
-      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+      <div className="space-y-3">
+        <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-500 font-mono">
+          Índices Actualizados
+        </h2>
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
         {/* ICL Card */}
         <div className="rounded-2xl border border-zinc-900 bg-zinc-950 p-5 space-y-2.5 relative overflow-hidden group hover:border-zinc-800 transition duration-300 shadow-lg shadow-black/10">
           <div className="flex items-center justify-between">
@@ -317,8 +315,9 @@ export default function PropertiesPage() {
           </p>
         </div>
       </div>
+    </div>
 
-      {/* Alerts Panel */}
+    {/* Alerts Panel */}
       {alerts.length > 0 && (
         <div className="rounded-2xl border border-amber-900/40 bg-amber-950/10 p-5 space-y-3">
           <div className="flex items-center gap-2 text-amber-400 font-semibold text-sm">
@@ -350,8 +349,13 @@ export default function PropertiesPage() {
         </div>
       )}
 
-      {/* Filter / View Bar */}
-      <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-zinc-800 bg-zinc-950 p-4">
+      {/* Gestión de Propiedades */}
+      <div className="space-y-4">
+        <h2 className="text-xs font-bold uppercase tracking-wider text-zinc-500 font-mono">
+          Gestión de Propiedades
+        </h2>
+        {/* Filter / View Bar */}
+        <div className="flex flex-wrap items-center justify-between gap-4 rounded-2xl border border-zinc-800 bg-zinc-950 p-4">
         <div className="flex items-center gap-2 text-xs font-semibold text-zinc-400">
           <Filter className="h-4 w-4 text-blue-400" />
           <span>Filtrar por tipo:</span>
@@ -395,6 +399,7 @@ export default function PropertiesPage() {
           ))}
         </div>
       )}
+      </div>
 
       {/* New Property Drawer Modal */}
       {isNewPropOpen && (
