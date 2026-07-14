@@ -69,14 +69,19 @@ export function MobileHeader() {
   }
 
   return (
-    <header className="sticky top-0 z-30 w-full border-b border-zinc-900 bg-zinc-950/80 backdrop-blur-md md:hidden">
-      <div className="flex flex-col px-4 py-3 gap-2.5">
+    <header className="fixed top-0 left-0 right-0 z-30 border-b border-zinc-900 bg-zinc-950/90 backdrop-blur-md md:hidden">
+      <div className="flex flex-col px-4 py-2.5 gap-2.5">
         {/* Top title area */}
-        <div className="flex items-center gap-2">
-          {activeSectionIcon}
-          <span className="text-xs font-bold text-white uppercase tracking-wider font-mono">
-            {activeSectionTitle}
+        <div className="flex items-center justify-between w-full">
+          <span className="font-bold text-white tracking-tight text-xs">
+            Marcela <span className="text-blue-500">| Finance</span>
           </span>
+          <div className="flex items-center gap-1.5 bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded-lg">
+            {activeSectionIcon}
+            <span className="text-[10px] font-bold text-zinc-300 uppercase tracking-wider font-mono">
+              {activeSectionTitle}
+            </span>
+          </div>
         </div>
 
         {/* Horizontal tabs */}

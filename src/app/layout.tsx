@@ -42,7 +42,7 @@ export default function RootLayout({
             <MobileHeader />
 
             {/* Main Content */}
-            <main className="flex-1 px-4 py-8 sm:px-6 lg:px-8 max-w-7xl w-full mx-auto">
+            <main className="flex-1 px-4 pb-8 pt-[96px] md:pt-8 sm:px-6 lg:px-8 max-w-7xl w-full mx-auto">
               {children}
             </main>
 

@@ -344,7 +344,74 @@ export default function MetricasFinanzasPage() {
             </p>
           </div>
 
-          <div className="overflow-x-auto font-sans">
+          {/* Mobile Stack View (lg:hidden) */}
+          <div className="lg:hidden">
+            {comparison.categoriasGastos && comparison.categoriasGastos.length > 0 ? (
+              <div className="space-y-3">
+                {comparison.categoriasGastos.map((cat: any, idx: number) => {
+                  const isInc = cat.variacionNominal > 0;
+                  const isDec = cat.variacionNominal < 0;
+                  return (
+                    <div 
+                      key={idx}
+                      className="p-4 rounded-xl border border-zinc-900 bg-zinc-950/40 hover:bg-zinc-900/10 transition-all duration-200"
+                    >
+                      <div className="flex items-center justify-between">
+                        <span className="text-sm font-semibold text-white">
+                          {cat.categoria}
+                        </span>
+                        <span
+                          className={`inline-block px-2 py-0.5 rounded-lg border text-[10px] font-bold font-mono ${
+                            isInc
+                              ? 'bg-red-500/5 border-red-500/10 text-red-400'
+                              : isDec
+                              ? 'bg-emerald-500/5 border-emerald-500/10 text-emerald-400'
+                              : 'bg-zinc-900 border-zinc-800 text-zinc-400'
+                          }`}
+                        >
+                          {isInc ? '+' : ''}
+                          {formatPercent(cat.variacionPorcentual)}
+                        </span>
+                      </div>
+
+                      <div className="grid grid-cols-3 gap-2 mt-3 pt-3 border-t border-zinc-900/60 text-left">
+                        <div>
+                          <span className="block text-[9px] text-zinc-500 uppercase tracking-wider font-mono">Actual</span>
+                          <span className="font-mono text-xs font-bold text-white mt-0.5 block">
+                            {formatCurrency(cat.actual)}
+                          </span>
+                        </div>
+                        <div>
+                          <span className="block text-[9px] text-zinc-500 uppercase tracking-wider font-mono">Anterior</span>
+                          <span className="font-mono text-xs text-zinc-500 mt-0.5 block">
+                            {formatCurrency(cat.anterior)}
+                          </span>
+                        </div>
+                        <div className="text-right">
+                          <span className="block text-[9px] text-zinc-500 uppercase tracking-wider font-mono">Var. Nominal</span>
+                          <span
+                            className={`font-mono text-xs font-bold mt-0.5 block ${
+                              isInc ? 'text-red-400' : isDec ? 'text-emerald-400' : 'text-zinc-500'
+                            }`}
+                          >
+                            {isInc ? '+' : ''}
+                            {formatCurrency(cat.variacionNominal)}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  );
+                })}
+              </div>
+            ) : (
+              <div className="py-8 text-center text-zinc-500 font-mono text-xs border border-dashed border-zinc-900 rounded-xl bg-zinc-950/20">
+                No hay datos cargados para comparar.
+              </div>
+            )}
+          </div>
+
+          {/* Desktop Table View (hidden lg:block) */}
+          <div className="hidden lg:block overflow-x-auto font-sans">
             <table className="w-full text-left text-xs text-zinc-400">
               <thead className="border-b border-zinc-900 text-[10px] font-bold uppercase tracking-wider text-zinc-500 font-mono">
                 <tr>
