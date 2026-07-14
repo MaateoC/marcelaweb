@@ -92,14 +92,14 @@ export function LocalTaxPanel({
             return (
               <div
                 key={tax.id}
-                className={`flex items-center justify-between rounded-xl border p-4 transition-all duration-200 ${
+                className={`flex flex-col sm:flex-row sm:items-center justify-between gap-4 rounded-xl border p-4 transition-all duration-200 ${
                   isPaid
                     ? 'border-emerald-500/20 bg-emerald-500/5'
-                    : 'border-zinc-800 bg-zinc-900/50 hover:border-zinc-700'
+                    : 'border-zinc-800 bg-zinc-905/50 hover:border-zinc-700'
                 }`}
               >
-                <div className="space-y-1">
-                  <div className="flex items-center gap-2">
+                <div className="space-y-1 w-full sm:w-auto">
+                  <div className="flex flex-wrap items-center gap-2">
                     <span className="text-sm font-semibold text-white">{tax.nombre}</span>
                     {isPaid ? (
                       <span className="inline-flex items-center gap-1 rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-medium text-emerald-400">
@@ -116,9 +116,9 @@ export function LocalTaxPanel({
                   </p>
                 </div>
 
-                <div className="flex items-center gap-4">
-                  <div className="text-right">
-                    <span className="block text-xs text-zinc-500">Monto</span>
+                <div className="flex items-center justify-between sm:justify-end gap-4 w-full sm:w-auto pt-3 sm:pt-0 border-t border-zinc-900/40 sm:border-0">
+                  <div className="text-left sm:text-right">
+                    <span className="block text-[10px] text-zinc-500 uppercase tracking-wider">Monto</span>
                     <span className="font-mono text-sm font-bold text-white">
                       {isPaid ? formatCurrency(payment.monto) : formatCurrency(tax.montoSugerido)}
                     </span>

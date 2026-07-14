@@ -37,8 +37,7 @@ export default function RootLayout({
           {/* Left Sidebar for Desktop */}
           <Sidebar />
 
-          {/* Main Content Container */}
-          <div className="flex-1 flex flex-col md:pl-64 min-h-screen pb-20 md:pb-0">
+          <div className="flex-1 flex flex-col md:pl-64 min-h-screen pb-20 md:pb-0 overflow-x-hidden">
             {/* Mobile Header Sub-Navigation */}
             <MobileHeader />
 

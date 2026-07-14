@@ -449,7 +449,7 @@ export default function GastosFijosPage() {
             <span className="text-xs">No tienes gastos fijos ni cuotas pendientes de pago.</span>
           </div>
         ) : (
-          <div className="rounded-2xl border border-zinc-800 bg-zinc-950 overflow-hidden shadow-sm">
+          <div className="rounded-2xl border border-zinc-800 bg-zinc-950 overflow-x-auto shadow-sm">
             <table className="w-full text-left text-xs text-zinc-400">
               <thead className="border-b border-zinc-900 text-[10px] font-bold uppercase tracking-wider text-zinc-500 font-mono bg-zinc-950/50">
                 <tr>
