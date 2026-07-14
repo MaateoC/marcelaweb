@@ -358,65 +358,127 @@ function FinanzasPageContent() {
                   return (
                     <div
                       key={tx.id}
-                      className="flex items-start justify-between p-4 rounded-xl border border-zinc-900 bg-zinc-950 hover:bg-zinc-900/30 hover:border-zinc-800 transition-all duration-200 group"
+                      className="p-4 rounded-xl border border-zinc-900 bg-zinc-950 hover:bg-zinc-900/30 hover:border-zinc-800 transition-all duration-200 group w-full"
                     >
-                      {/* Left Side: Icon and Description */}
-                      <div className="flex items-start gap-3.5">
-                        
-                        {/* Transaction Icon Box */}
-                        <div
-                          className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition-all duration-300 ${
-                            isIngreso
-                              ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400 group-hover:bg-emerald-500/15'
-                              : 'bg-red-500/10 border-red-500/20 text-red-400 group-hover:bg-red-500/15'
-                          }`}
-                        >
-                          {isIngreso ? (
-                            <ArrowUpRight className="h-5.5 w-5.5" />
-                          ) : (
-                            <ArrowDownRight className="h-5.5 w-5.5" />
-                          )}
+                      {/* Mobile Layout (sm:hidden) */}
+                      <div className="flex sm:hidden flex-col gap-2.5">
+                        <div className="flex items-start gap-3">
+                          {/* Icon */}
+                          <div
+                            className={`flex h-10 w-10 shrink-0 items-center justify-center rounded-xl border transition-all duration-300 ${
+                              isIngreso
+                                ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400'
+                                : 'bg-red-500/10 border-red-500/20 text-red-400'
+                            }`}
+                          >
+                            {isIngreso ? (
+                              <ArrowUpRight className="h-5 w-5" />
+                            ) : (
+                              <ArrowDownRight className="h-5 w-5" />
+                            )}
+                          </div>
+
+                          {/* Title and Amount */}
+                          <div className="flex-1 min-w-0">
+                            <span className="font-semibold text-white text-sm leading-snug block break-words">
+                              {tx.descripcion}
+                            </span>
+                            <span
+                              className={`font-mono text-sm font-bold tracking-tight block mt-1 ${
+                                isIngreso ? 'text-emerald-400' : 'text-red-400'
+                              }`}
+                            >
+                              {!isIngreso ? '-' : ''}
+                              {formatCurrency(tx.monto)}
+                            </span>
+                          </div>
                         </div>
 
-                        {/* Title and categories details */}
-                        <div className="flex flex-col min-w-0">
-                          <span className="font-semibold text-white truncate text-sm leading-snug group-hover:text-blue-400 transition-colors">
-                            {tx.descripcion}
-                          </span>
-                          <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
-                            <span className="inline-flex items-center rounded-md bg-zinc-900 border border-zinc-800/80 px-2 py-0.5 text-[10px] font-medium text-zinc-300">
+                        {/* Badges and Date Row */}
+                        <div className="flex flex-wrap items-center justify-between gap-1.5 pt-2 border-t border-zinc-900/60 pl-13">
+                          <div className="flex flex-wrap items-center gap-1.5">
+                            <span className="inline-flex items-center rounded-md bg-zinc-900 border border-zinc-800/80 px-2 py-0.5 text-[9px] font-medium text-zinc-300">
                               {tx.categoria}
                             </span>
                             {tx.subcategoria && (
-                              <span className="text-[10px] text-zinc-500 font-medium">
+                              <span className="text-[9px] text-zinc-500 font-medium">
                                 › {tx.subcategoria}
                               </span>
                             )}
                             {tx.propiedad && (
-                              <span className="inline-flex items-center rounded-md bg-blue-500/5 border border-blue-500/10 px-2 py-0.5 text-[10px] font-semibold text-blue-400">
+                              <span className="inline-flex items-center rounded-md bg-blue-500/5 border border-blue-500/10 px-1.5 py-0.5 text-[9px] font-semibold text-blue-400">
                                 {tx.propiedad.nombre}
                               </span>
                             )}
                           </div>
+                          <span className="text-[9px] font-mono text-zinc-500">
+                            {new Date(tx.fecha).toLocaleDateString('es-AR', {
+                              day: 'numeric',
+                              month: 'short',
+                            })}
+                          </span>
                         </div>
                       </div>
 
-                      {/* Right Side: Amount and Date */}
-                      <div className="flex flex-col items-end shrink-0 pl-4 pt-0.5 space-y-1">
-                        <span
-                          className={`font-mono text-sm sm:text-base font-bold tracking-tight ${
-                            isIngreso ? 'text-emerald-400' : 'text-red-400'
-                          }`}
-                        >
-                          {!isIngreso ? '-' : ''}
-                          {formatCurrency(tx.monto)}
-                        </span>
-                        <span className="text-[10px] font-mono text-zinc-500">
-                          {new Date(tx.fecha).toLocaleDateString('es-AR', {
-                            day: 'numeric',
-                            month: 'short',
-                          })}
-                        </span>
+                      {/* Desktop Layout (hidden sm:flex) */}
+                      <div className="hidden sm:flex items-start justify-between w-full">
+                        {/* Left Side: Icon and Description */}
+                        <div className="flex items-start gap-3.5">
+                          {/* Transaction Icon Box */}
+                          <div
+                            className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border transition-all duration-300 ${
+                              isIngreso
+                                ? 'bg-emerald-500/10 border-emerald-500/20 text-emerald-400 group-hover:bg-emerald-500/15'
+                                : 'bg-red-500/10 border-red-500/20 text-red-400 group-hover:bg-red-500/15'
+                            }`}
+                          >
+                            {isIngreso ? (
+                              <ArrowUpRight className="h-5.5 w-5.5" />
+                            ) : (
+                              <ArrowDownRight className="h-5.5 w-5.5" />
+                            )}
+                          </div>
+
+                          {/* Title and categories details */}
+                          <div className="flex flex-col min-w-0">
+                            <span className="font-semibold text-white truncate text-sm leading-snug group-hover:text-blue-400 transition-colors">
+                              {tx.descripcion}
+                            </span>
+                            <div className="flex flex-wrap items-center gap-1.5 mt-1.5">
+                              <span className="inline-flex items-center rounded-md bg-zinc-900 border border-zinc-800/80 px-2 py-0.5 text-[10px] font-medium text-zinc-300">
+                                {tx.categoria}
+                              </span>
+                              {tx.subcategoria && (
+                                <span className="text-[10px] text-zinc-500 font-medium">
+                                  › {tx.subcategoria}
+                                </span>
+                              )}
+                              {tx.propiedad && (
+                                <span className="inline-flex items-center rounded-md bg-blue-500/5 border border-blue-500/10 px-2 py-0.5 text-[10px] font-semibold text-blue-400">
+                                  {tx.propiedad.nombre}
+                                </span>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+
+                        {/* Right Side: Amount and Date */}
+                        <div className="flex flex-col items-end shrink-0 pl-4 pt-0.5 space-y-1">
+                          <span
+                            className={`font-mono text-sm sm:text-base font-bold tracking-tight ${
+                              isIngreso ? 'text-emerald-400' : 'text-red-400'
+                            }`}
+                          >
+                            {!isIngreso ? '-' : ''}
+                            {formatCurrency(tx.monto)}
+                          </span>
+                          <span className="text-[10px] font-mono text-zinc-500">
+                            {new Date(tx.fecha).toLocaleDateString('es-AR', {
+                              day: 'numeric',
+                              month: 'short',
+                            })}
+                          </span>
+                        </div>
                       </div>
                     </div>
                   );
