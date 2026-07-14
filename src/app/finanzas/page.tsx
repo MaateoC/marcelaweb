@@ -39,7 +39,14 @@ function FinanzasPageContent() {
   const [goals, setGoals] = useState<SavingsGoal[]>([]);
 
   useEffect(() => {
-    const stored = localStorage.getItem('savings_goals');
+    const getUserCookie = () => {
+      if (typeof document === 'undefined') return 'demo';
+      const match = document.cookie.match(/(?:^|; )marcela_finance_user=([^;]*)/);
+      return match ? match[1] : 'demo';
+    };
+    const user = getUserCookie();
+    const storageKey = `${user}_savings_goals`;
+    const stored = localStorage.getItem(storageKey);
     if (stored) {
       try {
         setGoals(JSON.parse(stored));
@@ -47,8 +54,8 @@ function FinanzasPageContent() {
         console.error(e);
       }
     } else {
-      // Defaults if not found
-      const defaults: SavingsGoal[] = [
+      // Defaults if not found (only for demo user)
+      const defaults: SavingsGoal[] = user === 'demo' ? [
         {
           id: 'goal-1',
           name: 'Cambiar el auto',
@@ -70,8 +77,8 @@ function FinanzasPageContent() {
             { id: 't-5', type: 'CONTRIBUTION', amount: 200000, date: '2026-07-05T12:00:00Z' }
           ]
         }
-      ];
-      localStorage.setItem('savings_goals', JSON.stringify(defaults));
+      ] : [];
+      localStorage.setItem(storageKey, JSON.stringify(defaults));
       setGoals(defaults);
     }
   }, []);
@@ -79,7 +86,14 @@ function FinanzasPageContent() {
   // Listen for storage events to sync changes across pages
   useEffect(() => {
     const syncGoals = () => {
-      const stored = localStorage.getItem('savings_goals');
+      const getUserCookie = () => {
+        if (typeof document === 'undefined') return 'demo';
+        const match = document.cookie.match(/(?:^|; )marcela_finance_user=([^;]*)/);
+        return match ? match[1] : 'demo';
+      };
+      const user = getUserCookie();
+      const storageKey = `${user}_savings_goals`;
+      const stored = localStorage.getItem(storageKey);
       if (stored) {
         try {
           setGoals(JSON.parse(stored));

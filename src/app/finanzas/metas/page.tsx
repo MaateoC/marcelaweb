@@ -47,9 +47,19 @@ export default function MetasAhorroPage() {
   const [tenenciaAmount, setTenenciaAmount] = useState('');
   const [tenenciaCurrency, setTenenciaCurrency] = useState<'ARS' | 'USD'>('USD');
 
+  const getUserCookie = () => {
+    if (typeof document === 'undefined') return 'demo';
+    const match = document.cookie.match(/(?:^|; )marcela_finance_user=([^;]*)/);
+    return match ? match[1] : 'demo';
+  };
+
   useEffect(() => {
+    const user = getUserCookie();
+    const goalsKey = `${user}_savings_goals`;
+    const holdingsKey = `${user}_savings_base_holdings`;
+
     // Load goals
-    const storedGoals = localStorage.getItem('savings_goals');
+    const storedGoals = localStorage.getItem(goalsKey);
     if (storedGoals) {
       try {
         setGoals(JSON.parse(storedGoals));
@@ -57,7 +67,7 @@ export default function MetasAhorroPage() {
         console.error(e);
       }
     } else {
-      const defaultGoals: SavingsGoal[] = [
+      const defaultGoals: SavingsGoal[] = user === 'demo' ? [
         {
           id: 'goal-1',
           name: 'Cambiar el auto',
@@ -79,13 +89,13 @@ export default function MetasAhorroPage() {
             { id: 't-5', type: 'CONTRIBUTION', amount: 200000, date: '2026-07-05T12:00:00Z' }
           ]
         }
-      ];
+      ] : [];
       setGoals(defaultGoals);
-      localStorage.setItem('savings_goals', JSON.stringify(defaultGoals));
+      localStorage.setItem(goalsKey, JSON.stringify(defaultGoals));
     }
 
     // Load base holdings
-    const storedHoldings = localStorage.getItem('savings_base_holdings');
+    const storedHoldings = localStorage.getItem(holdingsKey);
     if (storedHoldings) {
       try {
         setBaseHoldings(JSON.parse(storedHoldings));
@@ -93,16 +103,20 @@ export default function MetasAhorroPage() {
         console.error(e);
       }
     } else {
-      const defaultHoldings = { ARS: 500000, USD: 1200 };
+      const defaultHoldings = user === 'demo' ? { ARS: 500000, USD: 1200 } : { ARS: 0, USD: 0 };
       setBaseHoldings(defaultHoldings);
-      localStorage.setItem('savings_base_holdings', JSON.stringify(defaultHoldings));
+      localStorage.setItem(holdingsKey, JSON.stringify(defaultHoldings));
     }
   }, []);
 
   // Listen for storage events to sync changes across pages
   useEffect(() => {
     const syncAll = () => {
-      const storedGoals = localStorage.getItem('savings_goals');
+      const user = getUserCookie();
+      const goalsKey = `${user}_savings_goals`;
+      const holdingsKey = `${user}_savings_base_holdings`;
+
+      const storedGoals = localStorage.getItem(goalsKey);
       if (storedGoals) {
         try {
           setGoals(JSON.parse(storedGoals));
@@ -110,7 +124,7 @@ export default function MetasAhorroPage() {
           console.error(e);
         }
       }
-      const storedHoldings = localStorage.getItem('savings_base_holdings');
+      const storedHoldings = localStorage.getItem(holdingsKey);
       if (storedHoldings) {
         try {
           setBaseHoldings(JSON.parse(storedHoldings));
@@ -124,14 +138,18 @@ export default function MetasAhorroPage() {
   }, []);
 
   const saveGoals = (updatedGoals: SavingsGoal[]) => {
+    const user = getUserCookie();
+    const goalsKey = `${user}_savings_goals`;
     setGoals(updatedGoals);
-    localStorage.setItem('savings_goals', JSON.stringify(updatedGoals));
+    localStorage.setItem(goalsKey, JSON.stringify(updatedGoals));
     window.dispatchEvent(new Event('storage'));
   };
 
   const saveBaseHoldings = (updatedHoldings: BaseHoldings) => {
+    const user = getUserCookie();
+    const holdingsKey = `${user}_savings_base_holdings`;
     setBaseHoldings(updatedHoldings);
-    localStorage.setItem('savings_base_holdings', JSON.stringify(updatedHoldings));
+    localStorage.setItem(holdingsKey, JSON.stringify(updatedHoldings));
     window.dispatchEvent(new Event('storage'));
   };
 
