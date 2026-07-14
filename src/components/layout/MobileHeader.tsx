@@ -12,7 +12,8 @@ import {
   PiggyBank,
   DollarSign,
   CreditCard,
-  Layers
+  Layers,
+  LogOut
 } from 'lucide-react';
 
 export function MobileHeader() {
@@ -73,9 +74,21 @@ export function MobileHeader() {
       <div className="flex flex-col px-4 py-2.5 gap-2.5">
         {/* Top title area */}
         <div className="flex items-center justify-between w-full">
-          <span className="font-bold text-white tracking-tight text-xs">
-            Marcela <span className="text-blue-500">| Finance</span>
-          </span>
+          <div className="flex items-center gap-2">
+            <span className="font-bold text-white tracking-tight text-xs">
+              Marcela <span className="text-blue-500">| Finance</span>
+            </span>
+            <button
+              onClick={() => {
+                localStorage.removeItem('marcela_finance_session');
+                window.location.reload();
+              }}
+              className="p-1 rounded-md text-zinc-500 hover:text-red-400 hover:bg-zinc-900/60 transition-colors"
+              title="Cerrar sesión"
+            >
+              <LogOut className="h-3.5 w-3.5" />
+            </button>
+          </div>
           <div className="flex items-center gap-1.5 bg-zinc-900 border border-zinc-800 px-2 py-0.5 rounded-lg">
             {activeSectionIcon}
             <span className="text-[10px] font-bold text-zinc-300 uppercase tracking-wider font-mono">

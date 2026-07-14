@@ -17,7 +17,8 @@ import {
   Bell,
   X,
   PiggyBank,
-  DollarSign
+  DollarSign,
+  LogOut
 } from 'lucide-react';
 
 export function Sidebar() {
@@ -429,6 +430,18 @@ export function Sidebar() {
           })}
         </nav>
       </div>
+
+      {/* Logout Button */}
+      <button
+        onClick={() => {
+          localStorage.removeItem('marcela_finance_session');
+          window.location.reload();
+        }}
+        className="w-full flex items-center gap-2.5 rounded-xl px-3 py-2.5 text-xs font-bold text-red-400 hover:text-red-300 hover:bg-red-500/5 transition-all cursor-pointer border border-transparent hover:border-red-950/30 mb-2"
+      >
+        <LogOut className="h-4 w-4" />
+        <span>Cerrar Sesión</span>
+      </button>
 
       {/* Footer Info with Status Dot */}
       <div className="border-t border-zinc-900 pt-4 flex items-center justify-between">
