@@ -17,6 +17,7 @@ export interface Transaccion {
   pagoId?: string | null;
   medioPago?: string | null;
   tarjetaId?: string | null;
+  gastoFijoId?: string | null;
   cuotasTotal?: number | null;
   cuotaNumero?: number | null;
   recargo?: number | null;

@@ -621,7 +621,7 @@ export default function PropertyDetailPage({ params }: { params: Promise<{ id: s
                       return (
                         <button
                           key={p.id}
-                          type="button; cursor-pointer"
+                          type="button"
                           onClick={() => setSelectedMonthPago(p)}
                           className="relative z-10 flex flex-col items-center focus:outline-none group px-2 cursor-pointer"
                         >
