@@ -23,10 +23,10 @@ if (globalForPrisma.prisma) {
   }
 }
 
-function getCurrentUser(): string {
+async function getCurrentUser(): Promise<string> {
   try {
     const { cookies } = require('next/headers');
-    const cookieStore = cookies();
+    const cookieStore = await cookies();
     const userCookie = cookieStore.get('marcela_finance_user');
     return userCookie?.value || 'demo';
   } catch (e) {
@@ -38,47 +38,47 @@ const extendedPrisma = prismaInstance.$extends({
   query: {
     $allModels: {
       async findMany({ model, operation, args, query }) {
-        const user = getCurrentUser();
+        const user = await getCurrentUser();
         (args as any).where = { ...(args as any).where, user };
         return query(args);
       },
       async findFirst({ model, operation, args, query }) {
-        const user = getCurrentUser();
+        const user = await getCurrentUser();
         (args as any).where = { ...(args as any).where, user };
         return query(args);
       },
       async findUnique({ model, operation, args, query }) {
-        const user = getCurrentUser();
+        const user = await getCurrentUser();
         (args as any).where = { ...(args as any).where, user };
         return (query as any)(args);
       },
       async create({ model, operation, args, query }) {
-        const user = getCurrentUser();
+        const user = await getCurrentUser();
         (args as any).data = { ...(args as any).data, user };
         return query(args);
       },
       async update({ model, operation, args, query }) {
-        const user = getCurrentUser();
+        const user = await getCurrentUser();
         (args as any).where = { ...(args as any).where, user };
         return query(args);
       },
       async updateMany({ model, operation, args, query }) {
-        const user = getCurrentUser();
+        const user = await getCurrentUser();
         (args as any).where = { ...(args as any).where, user };
         return query(args);
       },
       async delete({ model, operation, args, query }) {
-        const user = getCurrentUser();
+        const user = await getCurrentUser();
         (args as any).where = { ...(args as any).where, user };
         return query(args);
       },
       async deleteMany({ model, operation, args, query }) {
-        const user = getCurrentUser();
+        const user = await getCurrentUser();
         (args as any).where = { ...(args as any).where, user };
         return query(args);
       },
       async count({ model, operation, args, query }) {
-        const user = getCurrentUser();
+        const user = await getCurrentUser();
         (args as any).where = { ...(args as any).where, user };
         return query(args);
       },

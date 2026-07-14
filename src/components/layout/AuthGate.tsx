@@ -24,6 +24,7 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
     localStorage.setItem('marcela_finance_session', 'authenticated');
     document.cookie = "marcela_finance_user=demo; path=/; max-age=31536000; SameSite=Lax";
     setIsAuthenticated(true);
+    window.location.reload();
   };
 
   const handleLoginSubmit = (e: React.FormEvent) => {
@@ -33,6 +34,7 @@ export function AuthGate({ children }: { children: React.ReactNode }) {
       document.cookie = "marcela_finance_user=marcela; path=/; max-age=31536000; SameSite=Lax";
       setIsAuthenticated(true);
       setError('');
+      window.location.reload();
     } else {
       setError('Usuario o contraseña incorrectos');
     }
