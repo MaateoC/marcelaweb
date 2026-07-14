@@ -362,8 +362,10 @@ export default function MetricasFinanzasPage() {
                     const isDec = cat.variacionNominal < 0;
                     return (
                       <tr key={idx} className="hover:bg-zinc-900/20 transition-colors">
-                        <td className="py-3.5 pr-4 flex items-center gap-2">
-                          <span className="text-white font-semibold">{cat.categoria}</span>
+                        <td className="py-3.5 pr-4">
+                          <div className="flex items-center gap-2">
+                            <span className="text-white font-semibold">{cat.categoria}</span>
+                          </div>
                         </td>
                         <td className="py-3.5 text-right font-mono text-white">
                           {formatCurrency(cat.actual)}

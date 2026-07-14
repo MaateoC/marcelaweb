@@ -358,10 +358,10 @@ function FinanzasPageContent() {
                   return (
                     <div
                       key={tx.id}
-                      className="flex items-center justify-between p-4 rounded-xl border border-zinc-900 bg-zinc-950 hover:bg-zinc-900/30 hover:border-zinc-800 transition-all duration-200 group"
+                      className="flex items-start justify-between p-4 rounded-xl border border-zinc-900 bg-zinc-950 hover:bg-zinc-900/30 hover:border-zinc-800 transition-all duration-200 group"
                     >
                       {/* Left Side: Icon and Description */}
-                      <div className="flex items-center gap-3.5">
+                      <div className="flex items-start gap-3.5">
                         
                         {/* Transaction Icon Box */}
                         <div
@@ -402,7 +402,7 @@ function FinanzasPageContent() {
                       </div>
 
                       {/* Right Side: Amount and Date */}
-                      <div className="flex flex-col items-end shrink-0 pl-4 space-y-1">
+                      <div className="flex flex-col items-end shrink-0 pl-4 pt-0.5 space-y-1">
                         <span
                           className={`font-mono text-sm sm:text-base font-bold tracking-tight ${
                             isIngreso ? 'text-emerald-400' : 'text-red-400'

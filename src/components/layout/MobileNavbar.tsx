@@ -3,13 +3,12 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { LayoutDashboard, Wallet, Building2, TrendingUp, Calculator } from 'lucide-react';
+import { Wallet, Building2, TrendingUp, Calculator } from 'lucide-react';
 
 export function MobileNavbar() {
   const pathname = usePathname();
 
   const navItems = [
-    { name: 'Inicio', href: '/', icon: LayoutDashboard },
     { name: 'Finanzas', href: '/finanzas', icon: Wallet },
     { name: 'Impuestos', href: '/finanzas/impuestos', icon: Calculator },
     { name: 'Alquileres', href: '/propiedades', icon: Building2 },
