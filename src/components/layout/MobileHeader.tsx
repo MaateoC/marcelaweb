@@ -37,6 +37,11 @@ export function MobileHeader() {
     { name: 'Tarjetas', href: '/configuracion/tarjetas', icon: CreditCard },
   ];
 
+  const metricasTabs = [
+    { name: 'Resumen Finanzas', href: '/metricas/finanzas', icon: Wallet },
+    { name: 'Alquileres', href: '/metricas/alquileres', icon: Building2 },
+  ];
+
   // Determine active section and tabs
   let activeSectionTitle = '';
   let activeSectionIcon: React.ReactNode = null;
@@ -57,8 +62,7 @@ export function MobileHeader() {
   } else if (pathname.startsWith('/metricas')) {
     activeSectionTitle = 'Métricas';
     activeSectionIcon = <Layers className="h-4 w-4 text-indigo-400" />;
-    // Metric has no subtabs currently but we show the header
-    tabs = [];
+    tabs = metricasTabs;
   } else {
     // Other pages
     return null;

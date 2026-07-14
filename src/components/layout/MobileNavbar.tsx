@@ -3,26 +3,30 @@
 import React from 'react';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
-import { Wallet, Building2, TrendingUp, Calculator } from 'lucide-react';
+import { Wallet, Building2, TrendingUp, Settings } from 'lucide-react';
 
 export function MobileNavbar() {
   const pathname = usePathname();
 
   const navItems = [
     { name: 'Finanzas', href: '/finanzas', icon: Wallet },
-    { name: 'Impuestos', href: '/finanzas/impuestos', icon: Calculator },
-    { name: 'Alquileres', href: '/propiedades', icon: Building2 },
-    { name: 'Métricas', href: '/metricas', icon: TrendingUp },
+    { name: 'Administración', href: '/propiedades', icon: Building2 },
+    { name: 'Métricas', href: '/metricas/finanzas', icon: TrendingUp },
+    { name: 'Configurar', href: '/configuracion/tarjetas', icon: Settings },
   ];
 
   return (
     <nav className="fixed bottom-0 left-0 right-0 z-40 md:hidden bg-zinc-950/90 backdrop-blur-lg border-t border-zinc-900 py-2 px-1 flex justify-around items-center">
       {navItems.map((item) => {
-        const isActive = item.href === '/'
-          ? pathname === '/'
-          : item.href === '/finanzas'
-            ? pathname === '/finanzas'
-            : pathname.startsWith(item.href);
+        const isActive = item.href === '/finanzas'
+          ? pathname.startsWith('/finanzas')
+          : item.href === '/propiedades'
+            ? pathname.startsWith('/propiedades')
+            : item.name === 'Métricas'
+              ? pathname.startsWith('/metricas')
+              : item.name === 'Configurar'
+                ? pathname.startsWith('/configuracion')
+                : pathname === item.href;
 
         const Icon = item.icon;
 
@@ -39,9 +43,11 @@ export function MobileNavbar() {
                 isActive
                   ? item.name === 'Finanzas'
                     ? 'bg-blue-500/10 text-blue-400'
-                    : item.name === 'Impuestos'
-                    ? 'bg-amber-500/10 text-amber-400'
-                    : 'bg-blue-500/10 text-blue-400'
+                    : item.name === 'Administración'
+                    ? 'bg-purple-500/10 text-purple-450'
+                    : item.name === 'Métricas'
+                    ? 'bg-indigo-500/10 text-indigo-400'
+                    : 'bg-zinc-800 text-zinc-200'
                   : 'text-zinc-500'
               }`}
             >
